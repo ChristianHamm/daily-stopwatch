@@ -52,19 +52,24 @@ func ToggleUser(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	// Toggle the speaking flag and calculate time
-	for i, user := range model.UserStore {
-		if user.Id == id {
-			if reset {
+	// Handle Reset
+	if reset {
+		for i, user := range model.UserStore {
+			if user.Id == id {
 				model.UserStore[i].Speaking = false
 				model.UserStore[i].SpeakDuration = 0
 				model.UserStore[i].StartDate = time.Now()
-			} else {
-				if !user.Speaking {
-					model.UserStore[i].StartDate = time.Now()
-				}
-				model.UserStore[i].Speaking = !model.UserStore[i].Speaking
 			}
+		}
+	}
+
+	// Toggle the speaking flag and calculate time, stop all other users
+	for i, user := range model.UserStore {
+		if user.Id == id && !user.Speaking {
+			model.UserStore[i].StartDate = time.Now()
+			model.UserStore[i].Speaking = true
+		} else {
+			model.UserStore[i].Speaking = false
 		}
 	}
 

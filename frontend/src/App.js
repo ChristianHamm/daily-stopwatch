@@ -11,7 +11,8 @@ const App = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${serverBaseUrl}/v1/user`);
+                const response = await fetch(`${serverBaseUrl}/v1/user`,
+                    {keepalive: true});
 
                 if (response.status === 200) {
                     const parsedData = await response.json();
@@ -41,6 +42,8 @@ const App = () => {
         <div className="App">
             <div className="App-header">
                 <h2>Stopwatch</h2>
+                <a className="github-fork-ribbon" href="https://github.com/ChristianHamm/daily-stopwatch" data-ribbon="Fork me on GitHub"
+                   title="Fork me on GitHub">Fork me on GitHub</a>
             </div>
             <div className="App-intro">
                 {data.map(item => (
